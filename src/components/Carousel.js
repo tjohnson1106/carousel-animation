@@ -5,7 +5,8 @@ import {
   Image,
   StyleSheet,
   Animated,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from "react-native";
 import { Svg } from "expo";
 
@@ -24,8 +25,9 @@ class Carousel extends Component {
 
   render() {
     return (
-      <View>
-        <Image source={{ uri: LOGO_URI }} style={styles.logoImage} />
+      <View style={styles.root}>
+        <StatusBar hidden />
+
         <Animated.ScrollView
           pagingEnabled
           scrollEventThrottle
@@ -49,6 +51,7 @@ class Carousel extends Component {
         >
           {PRODUCT_LIST.map((item, i) => this._renderItem(item, i))}
         </Animated.ScrollView>
+        <Image source={{ uri: LOGO_URI }} style={styles.logoImage} />
       </View>
     );
   }
@@ -103,7 +106,13 @@ class Carousel extends Component {
 }
 
 const styles = StyleSheet.create({
-  item: { width, height, alignItems: "center" },
+  item: {
+    width,
+    height,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 10
+  },
   scrollViewContainer: {
     alignItems: "center",
     justifyContent: "center"
@@ -154,8 +163,8 @@ const styles = StyleSheet.create({
     zIndex: -1
   },
   logoImage: {
-    width: 200,
-    height: 200,
+    width: width / 7,
+    height: width / 7,
     position: "absolute",
     top: 10,
     resizeMode: "contain"
