@@ -57,18 +57,55 @@ class Carousel extends Component {
   }
 
   _renderItem = (item, i) => {
+    const inputRange = [
+      (i - 2) * width,
+      (i - 1) * width,
+      i * width,
+      (i + 1) * width
+    ];
+
+    const imageScale = this._scrollX.interpolate({
+      inputRange,
+      outputRange: [1, 0.4, 1, 0.4]
+    });
+
+    const imageOpacity = this._scrollX.interpolate({
+      inputRange,
+      outputRange: [1, 0.2, 1, 0.2]
+    });
+
     return (
       <View key={item.id} style={[styles.root, styles.item]}>
-        <Image source={{ uri: getImageUri(item.id) }} style={[styles.image]} />
+        <Animated.Image
+          source={{ uri: getImageUri(item.id) }}
+          style={[
+            styles.image,
+            {
+              transform: [
+                {
+                  scale: imageScale
+                }
+              ],
+              opacity: imageOpacity
+            }
+          ]}
+        />
 
-        <View style={styles.metaContainer}>
+        <Animated.View
+          style={[
+            styles.metaContainer,
+            {
+              opacity: imageOpacity
+            }
+          ]}
+        >
           <Text style={[styles.font, styles.title]}>{item.title}</Text>
           <Text style={[styles.font, styles.subtitle]}>{item.subtitle}</Text>
           <Text style={[styles.font, styles.description]}>
             {item.description}
           </Text>
           <Text style={[styles.font, styles.price]}>{item.price}</Text>
-        </View>
+        </Animated.View>
 
         {this._renderRadialGradient(item.bg)}
       </View>
