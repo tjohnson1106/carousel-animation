@@ -23,8 +23,6 @@ const { width, height } = Dimensions.get("window");
 class Carousel extends Component {
   _scrollX = new Animated.Value(0);
 
-  _inputRange = [(i - 2) * width, (i - 1) * width, i * width, (i + 1) * width];
-
   render() {
     return (
       <View style={styles.root}>
@@ -59,13 +57,15 @@ class Carousel extends Component {
   }
 
   _renderItem = (item, i) => {
+    const inputRange = [(i - 2) * width, (i - 1) * width, i * width, (i + 1) * width];
+
     const imageScale = this._scrollX.interpolate({
-      inputRange: this._inputRange,
+      inputRange,
       outputRange: [1, 0.4, 1, 0.4]
     });
 
     const imageOpacity = this._scrollX.interpolate({
-      inputRange: this._inputRange,
+      inputRange,
       outputRange: [1, 0.2, 1, 0.2]
     });
 
@@ -100,29 +100,47 @@ class Carousel extends Component {
           <Text style={[styles.font, styles.price]}>{item.price}</Text>
         </Animated.View>
 
-        {this._renderRadialGradient(item.bg)}
+        {this._renderRadialGradient(item.bg, inputRange)}
       </View>
     );
   };
 
-  _renderRadialGradient = (color) => {
+  _renderRadialGradient = (color, inputRange) => {
     const rotate = this._scrollX.interpolate({
-      inputRange: this._inputRange,
-      outputRange: [0, width, 0, -width]
-    });
-
-    const translateX = this._scrollX.interpolate({
-      inputRange: this._inputRange,
+      inputRange,
       outputRange: ["0deg", "-15deg", "0deg", "15deg"]
     });
 
+    const translateX = this._scrollX.interpolate({
+      inputRange,
+      outputRange: [0, width, 0, -width]
+    });
+
     const opacity = this._scrollX.interpolate({
-      inputRange: this._inputRange,
+      inputRange,
       outputRange: [1, 0.5, 1, 0.5]
     });
 
     return (
-      <Animated.View style={styles.svgContainer}>
+      <Animated.View
+        style={[
+          styles.svgContainer,
+          {
+            transform: [
+              {
+                rotate
+              },
+              {
+                translateX
+              },
+              {
+                scale: 1.3
+              }
+            ],
+            opacity
+          }
+        ]}
+      >
         <Svg height={height} width={width}>
           <Defs>
             <RadialGradient
@@ -156,7 +174,7 @@ const styles = StyleSheet.create({
     height,
     alignItems: "center",
     justifyContent: "flex-end",
-    paddingBottom: 10
+    paddingBottom: 20
   },
   scrollViewContainer: {
     alignItems: "center",
@@ -211,7 +229,7 @@ const styles = StyleSheet.create({
     width: width / 7,
     height: width / 7,
     position: "absolute",
-    top: 10,
+    top: 40,
     resizeMode: "contain"
   }
 });
