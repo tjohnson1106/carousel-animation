@@ -23,6 +23,8 @@ const { width, height } = Dimensions.get("window");
 class Carousel extends Component {
   _scrollX = new Animated.Value(0);
 
+  _inputRange = [(i - 2) * width, (i - 1) * width, i * width, (i + 1) * width];
+
   render() {
     return (
       <View style={styles.root}>
@@ -57,20 +59,13 @@ class Carousel extends Component {
   }
 
   _renderItem = (item, i) => {
-    const inputRange = [
-      (i - 2) * width,
-      (i - 1) * width,
-      i * width,
-      (i + 1) * width
-    ];
-
     const imageScale = this._scrollX.interpolate({
-      inputRange,
+      inputRange: this._inputRange,
       outputRange: [1, 0.4, 1, 0.4]
     });
 
     const imageOpacity = this._scrollX.interpolate({
-      inputRange,
+      inputRange: this._inputRange,
       outputRange: [1, 0.2, 1, 0.2]
     });
 
@@ -101,9 +96,7 @@ class Carousel extends Component {
         >
           <Text style={[styles.font, styles.title]}>{item.title}</Text>
           <Text style={[styles.font, styles.subtitle]}>{item.subtitle}</Text>
-          <Text style={[styles.font, styles.description]}>
-            {item.description}
-          </Text>
+          <Text style={[styles.font, styles.description]}>{item.description}</Text>
           <Text style={[styles.font, styles.price]}>{item.price}</Text>
         </Animated.View>
 
@@ -113,8 +106,23 @@ class Carousel extends Component {
   };
 
   _renderRadialGradient = (color) => {
+    const rotate = this._scrollX.interpolate({
+      inputRange: this._inputRange,
+      outputRange: [0, width, 0, -width]
+    });
+
+    const translateX = this._scrollX.interpolate({
+      inputRange: this._inputRange,
+      outputRange: ["0deg", "-15deg", "0deg", "15deg"]
+    });
+
+    const opacity = this._scrollX.interpolate({
+      inputRange: this._inputRange,
+      outputRange: [1, 0.5, 1, 0.5]
+    });
+
     return (
-      <View style={styles.svgContainer}>
+      <Animated.View style={styles.svgContainer}>
         <Svg height={height} width={width}>
           <Defs>
             <RadialGradient
@@ -137,7 +145,7 @@ class Carousel extends Component {
             fillOpacity="0.9"
           />
         </Svg>
-      </View>
+      </Animated.View>
     );
   };
 }
