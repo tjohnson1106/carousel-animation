@@ -13,6 +13,8 @@ import { PRODUCT_LIST } from "../data/product-list";
 
 const { Defs, RadialGradient, Stop, Rect } = Svg;
 
+const LOGO_URI = `http://www.palaisdetokyo.com/sites/default/files/aiaiai_logo_circle_new_1.png`;
+
 const getImageUri = (id) => `https://aiaiai.dk/images/front/${id}_m.png`;
 
 const { width, height } = Dimensions.get("window");
@@ -23,6 +25,7 @@ class Carousel extends Component {
   render() {
     return (
       <View>
+        <Image source={{ uri: LOGO_URI }} style={styles.logoImage} />
         <Animated.ScrollView
           pagingEnabled
           scrollEventThrottle
@@ -149,6 +152,13 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: -1
+  },
+  logoImage: {
+    width: 200,
+    height: 200,
+    position: "absolute",
+    top: 10,
+    resizeMode: "contain"
   }
 });
 
