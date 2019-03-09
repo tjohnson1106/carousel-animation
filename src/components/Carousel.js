@@ -2,13 +2,18 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  ScrollView,
+  Image,
   StyleSheet,
   Animated,
   Dimensions
 } from "react-native";
+import { Svg } from "expo";
 
 import { PRODUCT_LIST } from "../data/product-list";
+
+const { Defs, RadialGradient, Stop, Rect } = Svg;
+
+const getImageUri = (id) => `https://aiaiai.dk/images/front/${id}_m.png`;
 
 const { width, height } = Dimensions.get("window");
 
@@ -48,6 +53,8 @@ class Carousel extends Component {
   _renderItem = (item, i) => {
     return (
       <View key={item.id} style={[styles.root, styles.item]}>
+        <Image source={{ uri: getImageUri(item.id) }} style={[styles.image]} />
+
         <View style={styles.metaContainer}>
           <Text style={[styles.font, styles.title]}>{item.title}</Text>
           <Text style={[styles.font, styles.subtitle]}>{item.subtitle}</Text>
@@ -56,17 +63,44 @@ class Carousel extends Component {
           </Text>
           <Text style={[styles.font, styles.price]}>{item.price}</Text>
         </View>
+
+        {this._renderRadialGradient(item.bg)}
+      </View>
+    );
+  };
+
+  _renderRadialGradient = (color) => {
+    return (
+      <View style={styles.svgContainer}>
+        <Svg height={height} width={width}>
+          <Defs>
+            <RadialGradient
+              id="grad"
+              cx="50%"
+              cy="35%"
+              r="60%"
+              gradientUnits="userSpaceOnUse"
+            >
+              <Stop offset="0%" stopColor="#fff" stopOpacity="1" />
+              <Stop offset="100%" stopColor={color} stopOpacity="1" />
+            </RadialGradient>
+          </Defs>
+          <Rect
+            x="0"
+            y="0"
+            width={width}
+            height={height}
+            fill={`url(#grad)`}
+            fillOpacity="0.9"
+          />
+        </Svg>
       </View>
     );
   };
 }
 
 const styles = StyleSheet.create({
-  item: {
-    width,
-    height,
-    alignItems: "center"
-  },
+  item: { width, height, alignItems: "center" },
   scrollViewContainer: {
     alignItems: "center",
     justifyContent: "center"
@@ -81,6 +115,12 @@ const styles = StyleSheet.create({
     fontFamily: "Menlo",
     color: "#222"
   },
+  image: {
+    width: width * 0.85,
+    height: width * 0.85,
+    resizeMode: "contain"
+  },
+
   metaContainer: {
     alignItems: "center",
     justifyContent: "flex-end",
@@ -103,6 +143,12 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 42,
     fontWeight: "400"
+  },
+  svgContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: -1
   }
 });
 

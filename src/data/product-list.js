@@ -1,7 +1,7 @@
 export const PRODUCT_LIST = [
   {
     id: "s02h02e02c02",
-    title: "TMA-2",
+    title: "TMA-1",
     subtitle: "DJ PRESET",
     description:
       "This configuration is based on the original TMA-1 DJ, which is the preferred choice of a range of acclaimed DJs.",
@@ -19,7 +19,7 @@ export const PRODUCT_LIST = [
   },
   {
     id: "s04h71e05c71",
-    title: "TMA-2",
+    title: "TMA-3",
     subtitle: "YOUNG GURU PRESET",
     description:
       "This configuration provides open, vibrant sound with good bass and treble. Wide sound stage and medium isolation.",
@@ -28,7 +28,7 @@ export const PRODUCT_LIST = [
   },
   {
     id: "s03h03e04c02",
-    title: "TMA-2",
+    title: "TMA-4",
     subtitle: "STUDIO PRESET",
     description:
       "This configuration provides a warm sound and it is good for extended listening. Great bass and added energy in the lower mid range.",
